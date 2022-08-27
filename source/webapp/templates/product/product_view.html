@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Product Details{% endblock %}
+
+{% block nav %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'webapp:product_update' product.pk %}">Update</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'webapp:product_delete' product.pk %}">Delete</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url "webapp:create_review" product.pk %}">Create Review</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+{#            <img src="{{ user.profile.avatar.url }}" class="card-img-top w-25" alt="...">#}
+            <h1>{{ product.name }}</h1>
+            <p class="card-text">Category: {{ product.get_category_display }}</p>
+            <p class="pre">Description: {{ product.description }}</p>
+        </div>
+    </div>
+    <div class="row">
+        {% for review in reviews %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="card-text"> Author: {{ review.author.name }}</p>
+                        <p class="card-text">{{ review.author.email }}</p>
+                        <p class="card-text">{{ review.review_text }}</p>
+                        <p class="card-text">{{ review.rating }}</p>
+                    </div>
+                    <div class="btn-group w-100" role="group" aria-label="Basic mixed styles example">
+                        <a class="btn btn-danger" href="{% url "webapp:update_review" review.pk %}">Update review</a>
+                        <a class="btn btn-warning" href="{% url "webapp:delete_review" review.pk %}">Delete review</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>There are no reviews</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
