@@ -1,5 +1,4 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from django.core.paginator import Paginator
@@ -53,35 +52,20 @@ def logout_view(request):
     logout(request)
     return redirect('webapp:index')
 
-#
-# def index(request):
-#     userlist = User.objects.all()
-#     return render(request, 'product/index.html', {'users': userlist})
-
 
 class ProfileView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "profile.html"
-    # paginate_by = 3
-    # paginate_orphans = 0
-
-    # def get_context_data(self, **kwargs):
-    #     paginator = Paginator(self.get_object().reviews.all(),
-    #                           self.paginate_by,
-    #                           self.paginate_orphans)
-    #     page_number = self.request.GET.get('page', 1)
-    #     page_object = paginator.get_page(page_number)
-    #     context = super().get_context_data(**kwargs)
-    #     context['page_obj'] = page_object
-    #     context['reviews'] = page_object.object_list
-    #     context['is_paginated'] = page_object.has_other_pages()
-    #     return context
+    paginate_by = 3
+    paginate_orphans = 0
+    context_object_name = "user_obj"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         id = self.object.id
         context['reviews'] = User.objects.filter(id=id)
         return context
+
 
 class ChangeProfileView(PermissionRequiredMixin, UpdateView):
     model = User
