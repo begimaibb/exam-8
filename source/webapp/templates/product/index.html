@@ -16,10 +16,13 @@
                                 href="{% url "webapp:product_view" product.pk %}">{{ product.name }}</a></h5>
                         <p class="card-text">Category: {{ product.get_category_display }}</p>
                         <div class="btn-group">
+                            {% if perms.webapp.change_product %}
                             <a class="btn btn-primary" href="{% url 'webapp:product_update' product.pk %}">Update</a>
+                            {% endif %}
+                            {% if perms.webapp.delete_product %}
                             <a class="btn btn-danger" href="{% url 'webapp:product_delete' product.pk %}">Delete</a>
+                            {% endif %}
                         </div>
-
                     </div>
                 </div>
             </div>

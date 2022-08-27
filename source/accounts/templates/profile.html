@@ -31,8 +31,8 @@
                         <p class="card-text">{{ review.rating }}</p>
                     </div>
                     <div class="btn-group w-100" role="group" aria-label="Basic mixed styles example">
-                        <a class="btn btn-danger" href="{% url "webapp:update_review" review.pk %}">Update review</a>
-                        <a class="btn btn-warning" href="{% url "webapp:delete_review" review.pk %}">Delete review</a>
+                        {% if perms.webapp.change_review or user == review.author %}  <a class="btn btn-danger" href="{% url "webapp:update_review" review.pk %}">Update review</a> {% endif %}
+                        {% if perms.webapp.delete_review or user == review.author %} <a class="btn btn-warning" href="{% url "webapp:delete_review" review.pk %}">Delete review</a> {% endif %}
                     </div>
                 </div>
             </div>

@@ -3,9 +3,15 @@
 {% block title %}Product Details{% endblock %}
 
 {% block nav %}
+    {% if perms.webapp.change_product %}
     <li class="nav-item"><a class="nav-link" href="{% url 'webapp:product_update' product.pk %}">Update</a></li>
+    {% endif %}
+    {% if perms.webapp.delete_product %}
     <li class="nav-item"><a class="nav-link" href="{% url 'webapp:product_delete' product.pk %}">Delete</a></li>
+    {% endif %}
+    {% if request.user.is_authenticated %}
     <li class="nav-item"><a class="nav-link" href="{% url "webapp:create_review" product.pk %}">Create Review</a></li>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -17,6 +23,7 @@
             <p class="pre">Description: {{ product.description }}</p>
         </div>
     </div>
+    <h2>Reviews</h2>
     <div class="row">
         {% for review in reviews %}
             <div class="col-12 col-md-6 col-lg-4">
@@ -28,8 +35,8 @@
                         <p class="card-text">{{ review.rating }}</p>
                     </div>
                     <div class="btn-group w-100" role="group" aria-label="Basic mixed styles example">
-                        <a class="btn btn-danger" href="{% url "webapp:update_review" review.pk %}">Update review</a>
-                        <a class="btn btn-warning" href="{% url "webapp:delete_review" review.pk %}">Delete review</a>
+                        {% if perms.webapp.change_review or user == review.author %}  <a class="btn btn-danger" href="{% url "webapp:update_review" review.pk %}">Update review</a> {% endif %}
+                        {% if perms.webapp.delete_review or user == review.author %} <a class="btn btn-warning" href="{% url "webapp:delete_review" review.pk %}">Delete review</a> {% endif %}
                     </div>
                 </div>
             </div>
